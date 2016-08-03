@@ -71,6 +71,7 @@ public class SlideTab extends View {
         mLinePaint = new Paint();
         mCirclePaint = new Paint();
         mTextPaint = new Paint();
+        mCircleSelPaint = new Paint();
 
         mLinePaint.setColor(mColorDef);
         mLinePaint.setStyle(Paint.Style.FILL);//设置填充

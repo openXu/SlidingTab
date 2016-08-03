@@ -28,10 +28,11 @@ public class SlideTab extends View {
 
     private int mColorTextDef;   // 默认文本的颜色
     private int mColorDef;       //
-    private int mColorSelect;
+    private int mColorSel;
 
     private int mLineHight;
     private int mCircleHight;
+    private int mCircleSelHight;
     private int mMarginTop;
     private int splitLengh;   //每一段横线长度
     private int textStartY;
@@ -46,6 +47,7 @@ public class SlideTab extends View {
     private Paint mTextPaint;
     private Paint mLinePaint;
     private Paint mCirclePaint;
+    private Paint mCircleSelPaint;
 
     public SlideTab(Context context) {
         this(context, null);
@@ -58,11 +60,12 @@ public class SlideTab extends View {
         //初始化
         tabNames = new String[]{"不推","推很重要的", "推重要的","全推"};
         mColorTextDef = Color.BLACK;
-        mColorSelect = Color.BLUE;
+        mColorSel = Color.BLUE;
         mColorDef = Color.argb(255,234,234,234);   //#EAEAEA
         mTextSize = 45;
         mLineHight = 5;
         mCircleHight = 50;
+        mCircleSelHight = 25;
         mMarginTop = 70;
 
         mLinePaint = new Paint();
@@ -78,6 +81,10 @@ public class SlideTab extends View {
         mCirclePaint.setStyle(Paint.Style.FILL);//设置填充
         mCirclePaint.setStrokeWidth(mLineHight);//笔宽像素
         mCirclePaint.setAntiAlias(true);//锯齿不显示
+        mCircleSelPaint.setColor(mColorSel);
+        mCircleSelPaint.setStyle(Paint.Style.STROKE);
+        mCircleSelPaint.setStrokeWidth(mCircleSelHight);
+        mCircleSelPaint.setAntiAlias(true);
 
         mTextPaint.setTextSize(mTextSize);
         mTextPaint.setColor(mColorTextDef);
@@ -155,12 +162,21 @@ public class SlideTab extends View {
         canvas.drawLine(mCircleHight/2, mCircleHight/2, getWidth()-mCircleHight/2,mCircleHight/2 , mLinePaint);
 
         for(int i = 0; i<tabNames.length; i++){
+
             int centerX = mCircleHight/2+(i*splitLengh);
             int centerY = mCircleHight/2;
             //float cx, float cy, float radius, @NonNull Paint paint
             //画小圆圈
             Log.v(TAG, "画圆：X:"+centerX+"  Y:"+centerY);
             canvas.drawCircle(centerX, centerY,mCircleHight/2,mCirclePaint);
+
+            if(selectedIndex == i){
+                //画选中圆圈
+                canvas.drawCircle(centerX, centerY, mCircleHight/2-mCircleSelHight, mCircleSelPaint);
+                mTextPaint.setColor(mColorSel);
+            }else{
+                mTextPaint.setColor(mColorTextDef);
+            }
 
             //绘制文字
             int startX = 0;

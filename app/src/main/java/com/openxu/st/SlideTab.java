@@ -9,6 +9,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * author : openXu
  * create at : 2016/8/3 16:37
@@ -23,25 +26,23 @@ public class SlideTab extends View {
 
     String TAG = "SlideTab";
 
-    private int mLineColor;
-    private int mLineHight;
+    private int mColorTextDef;   // 默认文本的颜色
+    private int mColorDef;       //
+    private int mColorSelect;
 
+    private int mLineHight;
     private int mCircleHight;
-    private int mCircleColorSelect;
+    private int mMarginTop;
+    private int splitLengh;   //每一段横线长度
+    private int textStartY;
+
+    private int selectedIndex = 0;   //当前选中序号
 
     private String[] tabNames;   //需要绘制的文字|
     private int mTextSize;       //文本的大小
-    private int mTextColorDef;   //默认文本的颜色
-    private int mTextColorSelect;//选中文本的颜色
 
-    private int mMarginTop;
+    private List<Rect> mBounds;   //绘制时控制文本绘制的范围
 
-    private int splitLengh;   //每一段横线长度
-
-    /**
-     * 绘制时控制文本绘制的范围
-     */
-    private Rect mBound;
     private Paint mTextPaint;
     private Paint mLinePaint;
     private Paint mCirclePaint;
@@ -56,34 +57,34 @@ public class SlideTab extends View {
         super(context, attrs, defStyleAttr);
         //初始化
         tabNames = new String[]{"不推","推很重要的", "推重要的","全推"};
-        mTextColorDef = Color.BLACK;
-        mTextColorSelect = Color.BLUE;
-        mLineColor = Color.argb(0,234,234,234);   //#EAEAEA
-        mTextColorSelect = Color.BLUE;
-        mTextSize = 60;
-        mLineHight = 10;
-        mCircleHight = 30;
-        mMarginTop = 30;
+        mColorTextDef = Color.BLACK;
+        mColorSelect = Color.BLUE;
+        mColorDef = Color.argb(255,234,234,234);   //#EAEAEA
+        mTextSize = 45;
+        mLineHight = 5;
+        mCircleHight = 50;
+        mMarginTop = 70;
 
         mLinePaint = new Paint();
-        mLinePaint.setColor(mLineColor);
+        mCirclePaint = new Paint();
+        mTextPaint = new Paint();
+
+        mLinePaint.setColor(mColorDef);
         mLinePaint.setStyle(Paint.Style.FILL);//设置填充
         mLinePaint.setStrokeWidth(mLineHight);//笔宽像素
         mLinePaint.setAntiAlias(true);//锯齿不显示
 
-        mCirclePaint = new Paint();
-        mCirclePaint.setColor(mLineColor);
+        mCirclePaint.setColor(mColorDef);
         mCirclePaint.setStyle(Paint.Style.FILL);//设置填充
         mCirclePaint.setStrokeWidth(mLineHight);//笔宽像素
         mCirclePaint.setAntiAlias(true);//锯齿不显示
 
-        mTextPaint = new Paint();
         mTextPaint.setTextSize(mTextSize);
-        mTextPaint.setColor(mTextColorDef);
+        mTextPaint.setColor(mColorTextDef);
         mLinePaint.setAntiAlias(true);
-        //获得绘制文本的宽和高
-        mBound = new Rect();
-        mTextPaint.getTextBounds(tabNames[0], 0, tabNames[0].length(), mBound);
+
+        measureText();
+
     }
 
     @Override
@@ -110,7 +111,7 @@ public class SlideTab extends View {
         if (heightMode == MeasureSpec.EXACTLY) {
             height = heightSize;
         } else {
-            float textHeight = mBound.height();
+            float textHeight = mBounds.get(0).height();
             height = (int) (textHeight + mCircleHight + mMarginTop + getPaddingTop() + getPaddingBottom());
             initConstant();
             Log.v(TAG, "文本的高度:"+textHeight + "控件的高度："+height);
@@ -119,10 +120,20 @@ public class SlideTab extends View {
         setMeasuredDimension(width, height);
     }
 
-
+    //获得绘制文本的宽和高
+    private void measureText(){
+        mBounds = new ArrayList<>();
+        for(String name : tabNames){
+            Rect mBound = new Rect();
+            mTextPaint.getTextBounds(name, 0, name.length(), mBound);
+            mBounds.add(mBound);
+        }
+    }
     private void initConstant(){
         int lineLengh = getWidth() - getPaddingLeft() - getPaddingRight() - mCircleHight;
         splitLengh = lineLengh/(tabNames.length-1);
+        Log.v(TAG, "getPaddingTop()"+getPaddingTop());
+        textStartY = mCircleHight + mMarginTop + getPaddingTop();
     }
 
     public void setTabNames(String[] tabNames){
@@ -131,6 +142,7 @@ public class SlideTab extends View {
                 Log.e(TAG, "tabNames's length must be more then 2");
             }else{
                 this.tabNames = tabNames;
+                measureText();
             }
         }
         initConstant();
@@ -143,10 +155,24 @@ public class SlideTab extends View {
         canvas.drawLine(mCircleHight/2, mCircleHight/2, getWidth()-mCircleHight/2,mCircleHight/2 , mLinePaint);
 
         for(int i = 0; i<tabNames.length; i++){
+            int centerX = mCircleHight/2+(i*splitLengh);
+            int centerY = mCircleHight/2;
             //float cx, float cy, float radius, @NonNull Paint paint
             //画小圆圈
-            Log.v(TAG, "画圆：X:"+(mCircleHight/2+(i*splitLengh))+"  Y:"+mCircleHight/2);
-            canvas.drawCircle(mCircleHight/2+(i*splitLengh),mCircleHight/2,mCircleHight/2,mCirclePaint);
+            Log.v(TAG, "画圆：X:"+centerX+"  Y:"+centerY);
+            canvas.drawCircle(centerX, centerY,mCircleHight/2,mCirclePaint);
+
+            //绘制文字
+            int startX = 0;
+            if(i == 0){
+                startX = 0;
+            }else if(i == tabNames.length-1){
+                startX = getWidth()-mBounds.get(i).width();
+            }else{
+                startX = centerX-(mBounds.get(i).width()/2);
+            }
+            Log.v(TAG, "写字：X:"+startX+"  Y:"+textStartY +"  字宽度："+mBounds.get(i).width());
+            canvas.drawText(tabNames[i], startX, textStartY, mTextPaint);
 
         }
 

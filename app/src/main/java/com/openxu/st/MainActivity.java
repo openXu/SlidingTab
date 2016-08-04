@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         slideTab.setSelectedIndex(2);
         //获取选中的序列号
         int selectIndex = slideTab.getSelectedIndex();
-        Log.e("openxu","当前选中的是"+selectIndex);
+        Log.e("openxu","您当前选中的索引是"+selectIndex);
 
     }
 }

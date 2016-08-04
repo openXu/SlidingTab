@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">SlidingTab</string>
+
+
+    <array name="tab_names">
+        <item>不推</item>
+        <item>推很重要的</item>
+        <item>推重要的</item>
+        <item>全推</item>
+        <item>推尼玛</item>
+    </array>
 </resources>

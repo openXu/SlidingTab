@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+    private int mColorTextDef;      // 默认文本的颜色
+    private int mColorDef;          // 线段和圆圈颜色
+    private int mColorSelected;     //选中的字体和圆圈颜色
+    private int mLineHight;         //基准线高度
+    private int mCircleHight;       //圆圈的高度（直径）
+    private int mCircleSelStroke;   //被选中圆圈（空心）的粗细
+    private int mMarginTop;         //圆圈和文字之间的距离
+    private String[] tabNames;      //需要绘制的文字
+    private int mTextSize;          //文本的字体大小
+    -->
+    <declare-styleable name="SlidTab">
+        <attr name="textColorDef" format="reference|color"/>             <!--默认文本的颜色-->
+        <attr name="android:textSize"/>                 <!--文本的字体大小-->
+        <attr name="defColor" format="reference|color" />  <!--线段和圆圈颜色-->
+        <attr name="selectedColor" format="reference|color" /><!--选中的字体和圆圈颜色-->
+        <attr name="lintHight" format="dimension" />   <!--基准线高度-->
+        <attr name="circleHight" format="dimension" />    <!--圆圈的高度（直径）-->
+        <attr name="circleSelStroke" format="dimension" />   <!--被选中圆圈（空心）的粗细-->
+        <attr name="mMarginTop" format="dimension" />   <!--圆圈和文字之间的距离-->
+        <attr name="tabNames" format="reference" />   <!--需要绘制的文字-->
+    </declare-styleable>
+</resources>

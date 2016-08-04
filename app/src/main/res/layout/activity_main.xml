@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:openXu="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dip">
 
     <com.openxu.st.SlideTab
-        android:id="@+id/sb_select"
+        android:id="@+id/slideTab"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textSize = "15sp"
+        openXu:textColorDef = "#A4A4A4"
+        openXu:defColor = "#EAEAEA"
+        openXu:selectedColor = "#5CBB8C"
+        openXu:lintHight = "2dip"
+        openXu:circleHight = "20dip"
+        openXu:circleSelStroke = "5dip"
+        openXu:mMarginTop = "15dip"
+        openXu:tabNames = "@array/tab_names" />
 </LinearLayout>

@@ -22,5 +22,6 @@ public class MainActivity extends AppCompatActivity {
         int selectIndex = slideTab.getSelectedIndex();
         Log.e("openxu","您当前选中的索引是"+selectIndex);
 
+
     }
 }

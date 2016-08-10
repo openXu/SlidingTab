@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!--
     private int mColorTextDef;      // 默认文本的颜色
     private int mColorDef;          // 线段和圆圈颜色

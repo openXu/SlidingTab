@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * author : openXu
- * create at : 2016/8/3 16:37
+ * create at : 2016/8/5 16:37
  * blog : http://blog.csdn.net/xmxkf
  * gitHub : https://github.com/openXu
  * project : SlidingTab
@@ -46,7 +46,7 @@ public class SlideTab extends View {
      */
     private float splitLengh;       //每一段横线长度
     private int textStartY;         //文本绘制的Y轴坐标
-    private List<Rect> mBounds;     //绘制时控制文本绘制的范围
+    private List<Rect> mBounds;     //保存文本的量的结果
 
     private Paint mTextPaint;      //绘制文字的画笔
     private Paint mLinePaint;      //绘制基准线的画笔
@@ -80,7 +80,7 @@ public class SlideTab extends View {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SlidTab);
         CharSequence[] names = ta.getTextArray(R.styleable.SlidTab_tabNames);
         if(null == names || names.length<=0){
-            tabNames = new String[]{"不推","推很重要的","推重要的","全推"};
+            tabNames = new String[]{"tab1","tab2","tab3","tab4"};
         }else{
             tabNames = new String[names.length];
             for(int i = 0; i<names.length;i++){
@@ -95,7 +95,7 @@ public class SlideTab extends View {
         mTextSize = ta.getDimensionPixelSize(R.styleable.SlidTab_android_textSize, 45);
 
         mLineHight = ta.getDimensionPixelSize(R.styleable.SlidTab_lintHight, 5);
-        mCircleHight = ta.getDimensionPixelSize(R.styleable.SlidTab_circleHight, 60);
+        mCircleHight = ta.getDimensionPixelSize(R.styleable.SlidTab_circleHight, 20);
         mCircleSelStroke = ta.getDimensionPixelSize(R.styleable.SlidTab_circleSelStroke, 10);
         mMarginTop = ta.getDimensionPixelSize(R.styleable.SlidTab_mMarginTop, 50);
 
@@ -239,11 +239,12 @@ public class SlideTab extends View {
     public boolean onTouchEvent(MotionEvent event) {
         slidX = event.getX();   //以本控件左上角为坐标原点
         slidY = event.getY();
+        //左右越界
         if(slidX< mCircleHight/2)
             slidX = mCircleHight/2;
         if(slidX>(getWidth() - mCircleHight/2))
             slidX = getWidth() - mCircleHight/2;
-//        Log.e(TAG, "手指位置:  getX:"+slidX+"  getY:"+slidY);
+        Log.e(TAG, "手指位置:  getX:"+slidX+"  getY:"+slidY);
         float select = slidX/splitLengh;
         int xs = (int)(select*10)-(((int)select)*10);
         selectedIndex = (int)select +(xs>5?1:0);
